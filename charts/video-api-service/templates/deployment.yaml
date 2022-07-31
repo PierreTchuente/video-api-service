@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    app: {{ .Chart.Name | quote }}
+    environment: {{ .Values.labels.environment | quote }}
+    framework: {{ .Values.labels.framework | quote }}
+    instance: {{ .Values.labels.instance | quote }}
+    repo: {{ .Values.labels.repo | quote }}
+    task: {{ .Values.labels.task | quote }}
+    version: {{ .Chart.Version | quote }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name | quote }}
+      instance: {{ .Values.labels.instance | quote }}
+      task: {{ .Values.labels.task | quote }}
+  strategy:
+    rollingUpdate:
+      maxUnavailable: {{ .Values.strategy.maxUnavailable }}
+      maxSurge: {{ .Values.strategy.maxSurge }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name | quote }}
+        environment: {{ .Values.labels.environment | quote }}
+        framework: {{ .Values.labels.framework | quote }}
+        instance: {{ .Values.labels.instance | quote }}
+        repo: {{ .Values.labels.repo | quote }}
+        task: {{ .Values.labels.task | quote }}
+        version: {{ .Chart.Version | quote }}
+    spec:
+      restartPolicy: Always
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.registry.url }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: ROLE
+              value: KUBERNETES
+          ports:
+          - name: http
+            containerPort: 3000
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 10
+            timeoutSeconds: 5
+            periodSeconds: 20
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 40
+            timeoutSeconds: 5
+            periodSeconds: 120
+          resources:
+            limits:
+              memory: {{ .Values.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}

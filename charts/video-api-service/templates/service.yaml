@@ -1,0 +1,21 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: {{ .Chart.Name }}
+  labels:
+    chart: {{ .Chart.Name | quote }}
+    environment: {{ .Values.labels.environment | quote }}
+    framework: {{ .Values.labels.framework | quote }}
+    instance: {{ .Values.labels.instance | quote }}
+    repo: {{ .Values.labels.repo | quote }}
+    task: {{ .Values.labels.task | quote }}
+    version: {{ .Chart.Version | quote }}
+spec:
+  ports:
+    - name: http
+      port: 5000
+      targetPort: 3000
+      protocol: TCP
+  selector:
+    app: {{ .Chart.Name }}
+  type: LoadBalancer

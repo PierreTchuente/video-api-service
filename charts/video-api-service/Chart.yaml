@@ -1,0 +1,4 @@
+apiVersion: v1
+description: A video-api-service
+name: video-api-service
+version: 1.0.0

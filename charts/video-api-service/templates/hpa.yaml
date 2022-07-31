@@ -1,0 +1,21 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: "{{ .Chart.Name }}"
+  labels:
+    app: {{ .Chart.Name | quote }}
+    environment: {{ .Values.labels.environment | quote }}
+    framework: {{ .Values.labels.framework | quote }}
+    instance: {{ .Values.labels.instance | quote }}
+    repo: {{ .Values.labels.repo | quote }}
+    task: {{ .Values.labels.task | quote }}
+    version: {{ .Chart.Version | quote }}
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: "{{ .Chart.Name }}"
+  minReplicas: {{ .Values.min_replicas }}
+  maxReplicas: {{ .Values.max_replicas }}
+  targetCPUUtilizationPercentage: 90
+  
