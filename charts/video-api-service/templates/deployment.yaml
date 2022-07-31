@@ -37,8 +37,8 @@ spec:
           image: "{{ .Values.image.registry.url }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            - name: ROLE
-              value: KUBERNETES
+            - name: NODE_ENV
+              value: {{.Values.environment}}
           ports:
           - name: http
             containerPort: 3000

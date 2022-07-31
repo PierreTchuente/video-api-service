@@ -22,7 +22,7 @@ strategy:
   maxSurge: 1
 
 environment: development
-config_file: development.ini
+config_file: development.json
 
 min_replicas: 2
 max_replicas: 10
