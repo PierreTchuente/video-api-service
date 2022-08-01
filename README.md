@@ -25,7 +25,7 @@ deployment.apps/video-api-service   2/2     2            2           4h28m
 
 ## Work to be done
 1. Add redis or memcache container for managing user session
-2. Store the user information (userID, deviceID, locationID?, and the number of video current watch by the user on that device)
-3. if user login with another device add the new device to the session and increase the number the video being stream
+2. Store the user information (userID, deviceID, locationID?, and the number of video currently being watched by the user on that device)
+3. if user login with another device add the new device to the session and increase the number the video being streamed.
 4. make sure the number of video on different devices do not exceed 3.
 5. Add unit and integration tests.
