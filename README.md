@@ -3,14 +3,21 @@ video-api-service is a nodejs api runing on kubernetes that can scale on demand.
 
 ## Installation
 To locally install this node application,please follow the steps bellow. (It is consider that you are running Docker and kubernetes cluster locally.)
-1. Install helm (read more [here](https://helm.sh/)). it is a package manager for kubernetes.
-2. Clone the video-api-service git repository (`https://github.com/PierreTchuente/video-api-service.git`) and navigte to the root folder of the repo.
-3.  Pull the folowing image form docker hub. `docker pull pierrearmand/video-api-service`
-4. run the folling command `helm3 upgrade --install video-api-service  charts/video-api-service --set image.tag=master,image.pullPolicy=IfNotPresent` to deploy it locally.
+1. Clone the video-api-service git repository (`https://github.com/PierreTchuente/video-api-service.git`) and navigte to the root folder of the repo.
+2. Build the docker image with this command: `docker build -t ${IMAGE_PATH} -f Dockerfile .`  ${IMAGE_PATH} in this case is `pierrearmand/video-api-service:master`
+3. Install helm (read more [here](https://helm.sh/)). it is a package manager for kubernetes.
+5. run the folling command `helm3 upgrade --install video-api-service  charts/video-api-service --set image.tag=master,image.pullPolicy=IfNotPresent` to deploy it locally.
 
 
 NB: A Loadbancer, HPA and a Container running the video-api-service will be deployed. for now, the kubernetes `Metrics API not available` in my 
 local cluster. 
+
+#### Loadbancer:
+receives request from clients (web brower, mobile app and etc) and distribute to the appropriate service(s)
+#### HPA
+kubernetes object responsible for scaling up and down containers base on resource metrics
+#### Container or Pod
+running instance of the application
 
 ```
 NAME                                                    REFERENCE                      TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
@@ -35,7 +42,7 @@ The whole application can be monitor over time to reach set the correct metrics 
 
 ## Work to be done
 1. Add redis or memcache container for managing user session
-2. Store the user information (userID, deviceID, locationID?, and the number of video currently being watched by the user on that device)
+2. Store the user information (user_id, device_id, location_id, video_id etc.., and the number of video currently being watched by the user on that device)
 3. if user login with another device add the new device to the session and increase the number the video being streamed.
 4. make sure the number of video on different devices do not exceed 3.
 5. Add unit and integration tests.
