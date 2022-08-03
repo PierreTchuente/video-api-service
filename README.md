@@ -9,7 +9,8 @@ To locally install this node application,please follow the steps bellow. (It is 
 4. run the folling command `helm3 upgrade --install video-api-service  charts/video-api-service --set image.tag=master,image.pullPolicy=IfNotPresent` to deploy it locally.
 
 
-NB: A Loadbancer, HPA and a Container running the video-api-service will be deployed
+NB: A Loadbancer, HPA and a Container running the video-api-service will be deployed. for now, the kubernetes `Metrics API not available` in my 
+local cluster. 
 
 ```
 NAME                                                    REFERENCE                      TARGETS         MINPODS   MAXPODS   REPLICAS   AGE
@@ -22,6 +23,15 @@ NAME                                READY   UP-TO-DATE   AVAILABLE   AGE
 deployment.apps/video-api-service   2/2     2            2           4h28m
 
 ```
+
+## Scalability
+The minimum number of pods (containers) replicas running when the service is deployed is 2 and the maximum number is 10.
+The containers have the following resources w:
+ 1. CPU:  2 * 30m
+ 2. Memory: 2 * 105MI
+The Horizontal scalling is based on the cpu utilisation. When the sum of running container cpu utilisation reach 90%, the kubernetes HPA
+Will automatically spawn 1 more container to handle the extra load. And this will go on aintill the maximum number of Replicas set is reached.
+The whole application can be monitor over time to reach set the correct metrics and maximum container(s) replicas.
 
 ## Work to be done
 1. Add redis or memcache container for managing user session
